@@ -65,17 +65,19 @@
     --success:     #006400;
 
     /* ── Typography scale ── */
-    --fs-display-xl: 48px;
-    --fs-display-lg: clamp(30px, 5.2vw, 40px);
-    --fs-display-md: clamp(25px, 3.4vw, 32px);
-    --fs-title-lg:   24px;
-    --fs-title-md:   20px;
-    --fs-title-sm:   18px;
-    --fs-label-md:   16px;
+    --fs-display-xl: 52px;
+    --fs-display-lg: clamp(32px, 5.4vw, 44px);
+    --fs-display-md: clamp(26px, 3.6vw, 34px);
+    --fs-title-lg:   26px;
+    --fs-title-md:   21px;
+    --fs-title-sm:   19px;
+    --fs-label-md:   17px;
     --fs-button:     16px;
-    --fs-body:       14px;
+    --fs-body:       16px;
     --fs-caption:    14px;
-    --fs-legal:      13.12px;
+    /* 카테고리 라벨처럼 가장 작은 글자. 이전에는 11px 을 직접 적어 두었다 */
+    --fs-micro:      12px;
+    --fs-legal:      13px;
 
     --lh-display: 1.2;
     --lh-title:   1.35;
@@ -185,7 +187,7 @@
   .brand-name { font-size: var(--fs-label-md); font-weight: 500; color: var(--ink); line-height: 1.2; }
   .brand-sub {
     display: block; margin-top: 2px;
-    font-size: 11px; font-weight: 500; letter-spacing: 0.16px;
+    font-size: var(--fs-micro); font-weight: 500; letter-spacing: 0.16px;
     text-transform: uppercase; color: var(--muted);
   }
 
@@ -338,7 +340,7 @@
   .frag-chip {
     flex: none; width: 28px; height: 28px; border-radius: var(--r-sm);
     display: grid; place-items: center;
-    font-size: 11px; font-weight: 500; color: var(--ink);
+    font-size: var(--fs-micro); font-weight: 500; color: var(--ink);
   }
   .frag-row strong { font-weight: 500; color: var(--ink); }
   .frag-row .meta { margin-left: auto; font-size: var(--fs-body); color: var(--muted); }
@@ -430,7 +432,7 @@
     font-size: var(--fs-title-lg); font-weight: 400; color: var(--ink);
   }
   .article-card .cat {
-    font-size: 11px; font-weight: 500; letter-spacing: 0.16px; text-transform: uppercase;
+    font-size: var(--fs-micro); font-weight: 500; letter-spacing: 0.16px; text-transform: uppercase;
     color: var(--muted);
   }
   .article-card p { font-size: var(--fs-body); line-height: var(--lh-para); }
@@ -438,7 +440,7 @@
   /* 카드별 대표 영상 한 줄 */
   .pick { display: flex; flex-direction: column; gap: 2px; }
   .pick .k {
-    font-size: 11px; font-weight: 500; letter-spacing: 0.16px;
+    font-size: var(--fs-micro); font-weight: 500; letter-spacing: 0.16px;
     text-transform: uppercase; color: var(--muted);
   }
   /* 제목이 길어 줄바꿈되므로 화살표를 인라인으로 붙여 마지막 글자를 따라가게 한다 */
