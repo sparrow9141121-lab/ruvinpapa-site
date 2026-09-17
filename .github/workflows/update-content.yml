@@ -30,6 +30,11 @@ jobs:
       - name: 유튜브 · 블로그 내용 읽어 index.html 갱신
         id: refresh
         continue-on-error: true      # 유튜브가 일시적으로 막아도 워크플로를 실패로 남기지 않는다
+        env:
+          # 저장소 Settings → Secrets and variables → Actions 에 YOUTUBE_API_KEY 를
+          # 등록해 두면 공식 API 로 조회수를 읽어 대표 영상 순위까지 갱신합니다.
+          # 없으면 대표 영상은 그대로 두고 최신 목록만 갱신합니다.
+          YOUTUBE_API_KEY: ${{ secrets.YOUTUBE_API_KEY }}
         run: python update-content.py
 
       - name: 바뀐 내용이 있으면 커밋

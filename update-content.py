@@ -18,6 +18,7 @@ import json
 import os
 import re
 import sys
+import urllib.parse
 import urllib.request
 import xml.etree.ElementTree as ET
 from datetime import datetime, timezone, timedelta
@@ -131,6 +132,76 @@ def with_view_counts(videos):
         except Exception:                      # 한 편 실패해도 전체는 계속 진행
             pass
     return sorted(videos, key=lambda v: v["views"], reverse=True)
+
+
+# ─────────────────────── 유튜브 공식 API (키가 있을 때만) ───────────────────────
+# 환경변수 YOUTUBE_API_KEY 가 있으면 공식 API 로 조회수를 읽습니다.
+# 깃허브 서버처럼 일반 접속으로는 조회수를 못 읽는 환경에서 쓰려고 만든 경로입니다.
+
+API_KEY = os.environ.get("YOUTUBE_API_KEY", "").strip()
+
+
+def api_get(path, **params):
+    params["key"] = API_KEY
+    url = "https://www.googleapis.com/youtube/v3/%s?%s" % (
+        path, urllib.parse.urlencode(params))
+    return json.loads(get(url))
+
+
+def iso_seconds(text):
+    """PT1H2M3S 형태의 재생시간을 초로 바꾼다."""
+    m = re.match(r"PT(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?", text or "")
+    if not m:
+        return 0
+    h, mi, s = (int(x) if x else 0 for x in m.groups())
+    return h * 3600 + mi * 60 + s
+
+
+def api_videos():
+    """공식 API 로 업로드 목록과 조회수를 가져온다 (쇼츠 제외, 조회수 많은 순)."""
+    uploads = "UU" + CHANNEL_ID[2:]          # 업로드 재생목록 ID 규칙
+    ids, token = [], None
+    while len(ids) < MAX_VIEW_LOOKUPS:
+        extra = {"pageToken": token} if token else {}
+        data = api_get("playlistItems", part="contentDetails",
+                       playlistId=uploads, maxResults=50, **extra)
+        ids += [i["contentDetails"]["videoId"] for i in data.get("items", [])]
+        token = data.get("nextPageToken")
+        if not token:
+            break
+
+    ids = ids[:MAX_VIEW_LOOKUPS]
+    out = []
+    for i in range(0, len(ids), 50):
+        data = api_get("videos", part="snippet,statistics,contentDetails",
+                       id=",".join(ids[i:i + 50]), maxResults=50)
+        for it in data.get("items", []):
+            if iso_seconds(it.get("contentDetails", {}).get("duration")) <= 60:
+                continue                      # 쇼츠는 대표 후보에서 제외
+            views = int(it.get("statistics", {}).get("viewCount", 0))
+            out.append({"id": it["id"],
+                        "title": it["snippet"]["title"],
+                        "views": views,
+                        "views_text": "조회수 %s회" % format(views, ","),
+                        "url": "https://www.youtube.com/watch?v=%s" % it["id"]})
+    if not out:
+        raise RuntimeError("API 응답에 영상이 없습니다.")
+    return sorted(out, key=lambda v: v["views"], reverse=True)
+
+
+def collect_videos():
+    """상황에 맞는 방법으로 영상 목록과 조회수를 가져온다."""
+    if API_KEY:
+        print("· 유튜브 공식 API 로 영상 목록과 조회수 읽는 중...")
+        try:
+            return api_videos()
+        except Exception as e:                # 키가 잘못됐거나 할당량 초과일 때
+            print("  (공식 API 실패: %s)" % e)
+            print("  일반 방식으로 대신 시도합니다.")
+    print("· 유튜브 영상 목록 읽는 중...")
+    videos = channel_videos()
+    print("· 조회수 확인 중... (영상 %d편)" % min(len(videos), MAX_VIEW_LOOKUPS))
+    return with_view_counts(videos)
 
 
 def feed_videos():
@@ -272,10 +343,7 @@ def video_pick_only(block):
 
 
 def main():
-    print("· 유튜브 영상 목록 읽는 중...")
-    videos = channel_videos()
-    print("· 조회수 확인 중... (영상 %d편)" % min(len(videos), MAX_VIEW_LOOKUPS))
-    popular = with_view_counts(videos)
+    popular = collect_videos()
     print("· 유튜브 최신 업로드 읽는 중...")
     feed = feed_videos()
     print("· 블로그 최신 글 읽는 중...")
