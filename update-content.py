@@ -249,6 +249,28 @@ def replace_block(doc, key, body):
 
 # ───────────────────────────────── 실행 ──────────────────────────────────
 
+def current_block(doc, key):
+    """index.html 에 지금 들어 있는 구역 내용을 그대로 돌려준다."""
+    open_, close = "<!-- AUTO:%s -->" % key, "<!-- /AUTO:%s -->" % key
+    i, j = doc.find(open_), doc.find(close)
+    if i < 0 or j < 0:
+        return ""
+    return doc[i + len(open_):j].strip(chr(10)).rstrip()
+
+
+def video_pick_only(block):
+    """구역 안에서 '대표 영상' 줄만 잘라낸다. 없으면 빈 문자열."""
+    i = block.find('<span class="k">대표 영상')
+    if i < 0:
+        return ""
+    start = block.rfind('<p class="pick">', 0, i)
+    end = block.find("</p>", i)
+    if start < 0 or end < 0:
+        return ""
+    line_start = block.rfind(chr(10), 0, start) + 1
+    return block[line_start:end + len("</p>")]
+
+
 def main():
     print("· 유튜브 영상 목록 읽는 중...")
     videos = channel_videos()
@@ -264,6 +286,10 @@ def main():
     if not posts:
         raise RuntimeError("블로그 글을 가져오지 못했습니다.")
 
+    # 유튜브가 조회수를 내주지 않는 환경(깃허브 서버 등)이 있다. 그때는 순위를 매길 수
+    # 없으므로 대표 영상은 지금 올라가 있는 것을 그대로 두고 최신 목록만 갱신한다.
+    have_views = any(v["views"] for v in popular)
+
     picks = pick_videos(popular)
     top_post = next((p for p in posts if p["url"] == PIN_POST), posts[0])
 
@@ -276,29 +302,36 @@ def main():
 
     # 1) 주제 카드의 대표 영상 / 대표 글
     for topic in ("history", "science", "economy"):
+        key = "pick-%s" % topic
         blocks = []
-        v = picks.get(topic)
-        if v:
-            label = "대표 영상 · %s" % v["views_text"] if v["views_text"] else "대표 영상"
-            blocks.append(render_pick(label, v))
+        if have_views:
+            v = picks.get(topic)
+            if v:
+                label = "대표 영상 · %s" % v["views_text"] if v["views_text"] else "대표 영상"
+                blocks.append(render_pick(label, v))
+        else:
+            kept = video_pick_only(current_block(doc, key))   # 기존 대표 영상 유지
+            if kept:
+                blocks.append(kept)
         if topic == "economy":
-            blocks.append(render_pick("대표 글", top_post))
+            blocks.append(render_pick("대표 글", top_post))    # 대표 글은 언제나 최신으로
         if not blocks:
             blocks.append('        <p class="feed-empty">준비 중입니다.</p>')
-        doc = replace_block(doc, "pick-%s" % topic, "\n".join(blocks))
+        doc = replace_block(doc, key, chr(10).join(blocks))
 
     # 2) 최신 목록
     doc = replace_block(doc, "latest-videos", render_rows(latest_videos))
     doc = replace_block(doc, "latest-posts", render_rows(latest_posts))
 
-    # 3) 히어로 카드의 세 줄 요약
-    frag = []
-    for topic in ("history", "science"):
-        v = picks.get(topic)
-        if v:
-            frag.append((topic, short_title(v["title"]), TOPIC_LABEL[topic]))
-    frag.append(("economy", short_title(top_post["title"]), "경제 · 블로그"))
-    doc = replace_block(doc, "frag", render_frag(frag))
+    # 3) 히어로 카드의 세 줄 요약 (대표 영상을 건드리지 않는 날은 그대로 둔다)
+    if have_views:
+        frag = []
+        for topic in ("history", "science"):
+            v = picks.get(topic)
+            if v:
+                frag.append((topic, short_title(v["title"]), TOPIC_LABEL[topic]))
+        frag.append(("economy", short_title(top_post["title"]), "경제 · 블로그"))
+        doc = replace_block(doc, "frag", render_frag(frag))
 
     # 4) 갱신 시각
     stamp = datetime.now(KST).strftime("%Y-%m-%d %H:%M")
@@ -311,15 +344,20 @@ def main():
             io.open(TARGET, encoding="utf-8").read())
     io.open(TARGET, "w", encoding="utf-8", newline="").write(doc)
 
-    print("\n반영 결과")
-    for topic in ("history", "science", "economy"):
-        v = picks.get(topic)
-        print("  대표 %s : %s" % (TOPIC_LABEL[topic],
-                                  "%s (%s)" % (v["title"], v["views_text"] or "조회수 미확인")
-                                  if v else "해당 영상 없음"))
+    print("")
+    print("반영 결과")
+    if have_views:
+        for topic in ("history", "science", "economy"):
+            v = picks.get(topic)
+            print("  대표 %s : %s" % (TOPIC_LABEL[topic],
+                                      "%s (%s)" % (v["title"], v["views_text"] or "조회수 미확인")
+                                      if v else "해당 영상 없음"))
+    else:
+        print("  대표 영상 : 조회수를 읽지 못해 기존 선정을 그대로 두었습니다.")
     print("  대표 글  : %s" % top_post["title"])
     print("  최신 영상 %d개 / 최신 글 %d개" % (len(latest_videos), len(latest_posts)))
-    print("\n완료 — index.html 갱신 (%s), 직전 파일은 index.bak.html 로 보관" % stamp)
+    print("")
+    print("완료 — index.html 갱신 (%s), 직전 파일은 index.bak.html 로 보관" % stamp)
 
 
 if __name__ == "__main__":
