@@ -569,7 +569,16 @@
   }
 
   @media (max-width: 768px) {
-    :root { --sp-section: 64px; }
+    :root {
+      --sp-section: 64px;
+      /* 화면이 작을수록 글자가 작아 보여 본문 계열을 한 단계씩 더 키운다 */
+      --fs-body:       18px;
+      --fs-button:     18px;
+      --fs-label-md:   19px;
+      --fs-title-sm:   20px;
+      --fs-caption:    15px;
+      --fs-micro:      13px;
+    }
 
     .nav { position: relative; }
     .nav-toggle { display: flex; }
