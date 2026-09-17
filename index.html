@@ -1,0 +1,1206 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#ffffff">
+<title>빈이아빠 | 역사·과학·경제 지식 크리에이터</title>
+<meta name="description" content="역사의 시작, 과학의 원리, 경제의 질서를 되짚는 지식 크리에이터 빈이아빠의 기록.">
+<meta property="og:title" content="빈이아빠 | Chronos Arche">
+<meta property="og:description" content="역사에서 지혜를, 과학에서 원리를, 경제에서 질서를 읽습니다.">
+<meta property="og:type" content="website">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='12' fill='%23181d26'/><text x='50' y='68' font-size='54' font-weight='500' text-anchor='middle' fill='%23ffffff' font-family='sans-serif'>빈</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Noto+Sans+KR:wght@400;500&display=swap">
+<style>
+  /* ═══════════════════════════════════════════════════════════
+     Airtable Editorial Design System 적용
+     · 캔버스는 언제나 흰색. 히어로에 그라데이션/메시/오로라 금지.
+     · 브랜드 전압은 시그니처 카드(coral / forest / dark / cream)가 담당.
+     · 디스플레이 타입은 400~500. 700은 쓰지 않는다.
+     · pill(9999px) 반경은 pricing 서브시스템 전용 → 이 사이트에선 미사용.
+     · hover 상태는 문서화하지 않는다. Default / Active(pressed)만.
+     · Haas 대체: Inter(라틴) + Pretendard(한글).
+     ═══════════════════════════════════════════════════════════ */
+
+  :root {
+    /* ── Brand & Accent ── */
+    --primary:        #181d26;
+    --primary-active: #0d1218;
+
+    /* ── Surface ── */
+    --canvas:               #ffffff;
+    --surface-soft:         #f8fafc;
+    --surface-strong:       #e0e2e6;
+    --surface-dark:         #181d26;
+    --surface-dark-elevated:#1d1f25;
+    --hairline:             #dddddd;
+
+    /* ── Text ── */
+    --ink:           #181d26;
+    --body:          #333840;
+    --muted:         #41454d;
+    --border-strong: #9297a0;
+    --on-primary:    #ffffff;
+
+    /* ── Signature card surfaces ── */
+    --signature-coral:   #aa2d00;
+    --signature-forest:  #0a2e0e;
+    --signature-cream:   #f5e9d4;
+    --signature-peach:   #fcab79;
+    --signature-mint:    #a8d8c4;
+    --signature-yellow:  #f4d35e;
+    --signature-mustard: #d9a441;
+
+    /* ── Semantic ── */
+    --link:        #1b61c9;   /* 링크 색. primary 버튼 색이 아니다 */
+    --link-active: #1a3866;
+
+    /* 아래는 시스템이 정의하지만 이 페이지에는 해당 서피스가 없어 미사용.
+       (폼·쿠키배너·기사 히어로가 생기면 그대로 쓰기 위해 남겨둔 예약 토큰) */
+    --info:        #254fad;
+    --info-border: #458fff;
+    --success:     #006400;
+
+    /* ── Typography scale ── */
+    --fs-display-xl: 48px;
+    --fs-display-lg: clamp(30px, 5.2vw, 40px);
+    --fs-display-md: clamp(25px, 3.4vw, 32px);
+    --fs-title-lg:   24px;
+    --fs-title-md:   20px;
+    --fs-title-sm:   18px;
+    --fs-label-md:   16px;
+    --fs-button:     16px;
+    --fs-body:       14px;
+    --fs-caption:    14px;
+    --fs-legal:      13.12px;
+
+    --lh-display: 1.2;
+    --lh-title:   1.35;
+    --lh-body:    1.25;
+    /* 한글 본문은 1.25가 과하게 조여 보여 문단 전용 행간을 따로 둔다 */
+    --lh-para:    1.72;
+
+    /* ── Spacing (base 4px) ── */
+    --sp-xxs: 4px;  --sp-xs: 8px;  --sp-sm: 12px; --sp-md: 16px;
+    --sp-lg: 24px;  --sp-xl: 32px; --sp-xxl: 48px;
+    --sp-section: 96px;
+
+    /* ── Grid ── */
+    --shell:  1280px;
+    --gutter: clamp(20px, 5vw, 48px);
+    --nav-h:  64px;
+
+    /* ── Radius ── */
+    --r-xs: 2px; --r-sm: 6px; --r-md: 10px; --r-lg: 12px; --r-full: 9999px;
+
+    /* ── Elevation: color-block first, shadow second ── */
+    --elev-button: 0 1px 2px rgba(24,29,38,.10), 0 4px 14px rgba(27,97,201,.10);
+    --focus-ring:  0 0 0 2px rgba(27,97,201,.45);
+
+    /* 라틴은 Inter, 한글은 Pretendard.
+       Pretendard는 jsDelivr에서 오므로 외부 CDN이 막힌 환경(예: 아티팩트 뷰어)에서는
+       Google Fonts의 Noto Sans KR로 자연스럽게 내려앉는다. */
+    --sans: 'Inter', 'Pretendard Variable', Pretendard, 'Noto Sans KR',
+            -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu,
+            Cantarell, 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+    --ease: cubic-bezier(.22,.61,.36,1);
+
+    color-scheme: light;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+    font-synthesis: none;
+  }
+
+  body {
+    font-family: var(--sans);
+    background: var(--canvas);
+    color: var(--body);
+    font-size: var(--fs-body);
+    line-height: var(--lh-para);
+    word-break: keep-all;
+    overflow-wrap: break-word;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  body.menu-open { overflow: hidden; }
+
+  a { color: inherit; text-decoration: none; }
+  ::selection { background: var(--signature-yellow); color: var(--ink); }
+  [id], section { scroll-margin-top: calc(var(--nav-h) + var(--sp-lg)); }
+
+  :where(a, button, [tabindex]):focus { outline: none; }
+  :where(a, button, [tabindex]):focus-visible {
+    outline: none;
+    box-shadow: var(--focus-ring);
+    border-radius: var(--r-sm);
+  }
+  .btn:focus-visible, .to-top:focus-visible { border-radius: var(--r-lg); }
+  .demo-card:focus-visible, .article-card:focus-visible { border-radius: var(--r-md); }
+
+  .skip {
+    position: absolute; left: var(--gutter); top: -120px; z-index: 200;
+    padding: var(--sp-sm) var(--sp-lg); border-radius: var(--r-sm);
+    background: var(--primary); color: var(--on-primary);
+    font-size: var(--fs-body); font-weight: 500;
+    transition: top .2s var(--ease);
+  }
+  .skip:focus-visible { top: 12px; }
+
+  .shell { width: min(100% - var(--gutter) * 2, var(--shell)); margin-inline: auto; }
+
+  /* ═══════════ top-nav ═══════════ */
+  .nav {
+    position: sticky; top: 0; z-index: 100;
+    height: var(--nav-h);
+    display: flex; align-items: center;
+    background: var(--canvas);
+    border-bottom: 1px solid transparent;
+    transition: border-color .25s var(--ease);
+  }
+  .nav.scrolled { border-bottom-color: var(--hairline); }
+
+  .nav-inner {
+    width: min(100% - var(--gutter) * 2, var(--shell));
+    margin-inline: auto;
+    display: flex; align-items: center; gap: var(--sp-xl);
+  }
+
+  .brand { display: flex; align-items: center; gap: var(--sp-sm); flex: none; }
+  .brand-mark {
+    width: 32px; height: 32px; flex: none;
+    border-radius: var(--r-sm);
+    display: grid; place-items: center;
+    background: var(--primary); color: var(--on-primary);
+    font-size: var(--fs-body); font-weight: 500; line-height: 1;
+  }
+  .brand-name { font-size: var(--fs-label-md); font-weight: 500; color: var(--ink); line-height: 1.2; }
+  .brand-sub {
+    display: block; margin-top: 2px;
+    font-size: 11px; font-weight: 500; letter-spacing: 0.16px;
+    text-transform: uppercase; color: var(--muted);
+  }
+
+  .nav-links { list-style: none; display: flex; align-items: center; gap: var(--sp-lg); margin-right: auto; }
+  .nav-links a {
+    display: inline-flex; align-items: center; min-height: 44px;
+    font-size: var(--fs-body); font-weight: 400; color: var(--body);
+  }
+  .nav-links a:active { color: var(--ink); }
+
+  .nav-right { display: flex; align-items: center; gap: var(--sp-sm); flex: none; }
+  .nav-text-link {
+    display: inline-flex; align-items: center; min-height: 44px;
+    font-size: var(--fs-body); font-weight: 400; color: var(--body);
+  }
+  .nav-cta { min-height: 40px; padding: 10px 20px; }
+
+  .nav-toggle {
+    display: none;
+    width: 44px; height: 44px; flex: none;
+    border: 1px solid var(--hairline); border-radius: var(--r-sm);
+    background: var(--canvas); cursor: pointer;
+    flex-direction: column; align-items: center; justify-content: center; gap: 5px;
+  }
+  .nav-toggle span {
+    display: block; width: 16px; height: 1.5px; background: var(--ink);
+    transition: transform .3s var(--ease), opacity .2s var(--ease);
+  }
+  .nav.open .nav-toggle span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
+  .nav.open .nav-toggle span:nth-child(2) { opacity: 0; }
+  .nav.open .nav-toggle span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
+
+  /* ═══════════ Buttons ═══════════ */
+  .btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: var(--sp-xs);
+    min-height: 48px;
+    padding: var(--sp-md) var(--sp-lg);
+    border-radius: var(--r-lg);
+    font-family: var(--sans);
+    font-size: var(--fs-button); font-weight: 500; line-height: 1.4;
+    border: 1px solid transparent;
+    cursor: pointer;
+    transition: background .18s var(--ease), border-color .18s var(--ease), color .18s var(--ease);
+  }
+  .btn-primary {
+    background: var(--primary); color: var(--on-primary);
+    box-shadow: var(--elev-button);
+  }
+  .btn-primary:active { background: var(--primary-active); }
+  .btn-secondary {
+    background: var(--canvas); color: var(--ink);
+    border-color: var(--hairline);
+  }
+  .btn-secondary:active { background: var(--surface-soft); }
+  /* 다크/시그니처 서피스 위에서도 버튼은 흰색 그대로 — 반투명 반전 없음 */
+  .btn-on-dark { background: var(--canvas); color: var(--ink); border-color: var(--canvas); }
+  .btn-on-dark:active { background: var(--surface-strong); }
+
+  .btn .icon { width: 18px; height: 18px; flex: none; }
+  .btn .icon svg { width: 100%; height: 100%; display: block; }
+
+  .text-link {
+    color: var(--link); font-size: var(--fs-body);
+    display: inline-flex; align-items: center; gap: 6px;
+  }
+  .text-link:active { color: var(--link-active); }
+  .text-link .arrow { width: 16px; height: 16px; flex: none; }
+  .text-link .arrow svg { width: 100%; height: 100%; display: block; }
+
+  /* ═══════════ Band rhythm ═══════════ */
+  .band { padding-block: var(--sp-section); }
+
+  .eyebrow {
+    font-size: var(--fs-caption); font-weight: 500; letter-spacing: 0.16px;
+    color: var(--muted);
+    margin-bottom: var(--sp-md);
+  }
+  h1, h2, h3 { color: var(--ink); text-wrap: balance; }
+
+  .display-lg { font-size: var(--fs-display-lg); font-weight: 400; line-height: 1.15; letter-spacing: -0.01em; }
+  .display-md { font-size: var(--fs-display-md); font-weight: 400; line-height: var(--lh-display); letter-spacing: -0.01em; }
+  .title-lg   { font-size: var(--fs-title-lg); font-weight: 400; line-height: var(--lh-title); letter-spacing: 0.12px; }
+  .title-md   { font-size: var(--fs-title-md); font-weight: 400; line-height: 1.5; }
+  .title-sm   { font-size: var(--fs-title-sm); font-weight: 500; line-height: 1.4; }
+  .label-md   { font-size: var(--fs-label-md); font-weight: 500; line-height: 1.4; }
+  .lede { font-size: var(--fs-body); line-height: var(--lh-para); color: var(--body); text-wrap: pretty; }
+
+  /* ═══════════ hero-band ═══════════ */
+  /* 흰 캔버스 + 96px 여백. 배경 장식 없음. */
+  .hero {
+    padding-block: var(--sp-section);
+    display: flex; flex-direction: column; align-items: flex-start;
+  }
+  .hero .avatar {
+    width: 64px; height: 64px; border-radius: var(--r-full);
+    display: grid; place-items: center;
+    background: var(--signature-cream); color: var(--ink);
+    font-size: var(--fs-title-lg); font-weight: 500;
+    margin-bottom: var(--sp-lg);
+  }
+  .hero h1 { margin-bottom: var(--sp-md); max-width: 18ch; }
+  .hero .lede { max-width: 42ch; }
+  .hero-links { margin-top: var(--sp-xl); display: flex; gap: var(--sp-sm); flex-wrap: wrap; }
+
+  /* ── logo-strip (키워드 스트립) ── */
+  .logo-strip {
+    padding-block: var(--sp-xl);
+    border-top: 1px solid var(--hairline);
+    display: flex; flex-wrap: wrap; align-items: center;
+    gap: var(--sp-md) var(--sp-xl);
+  }
+  .logo-strip .caption {
+    font-size: var(--fs-caption); font-weight: 500; letter-spacing: 0.16px; color: var(--muted);
+  }
+  .logo-strip ul { list-style: none; display: flex; flex-wrap: wrap; gap: var(--sp-md) var(--sp-lg); }
+  .logo-strip li { font-size: var(--fs-label-md); font-weight: 500; color: var(--muted); }
+
+  /* ═══════════ signature cards ═══════════ */
+  .sig-card {
+    border-radius: var(--r-lg);
+    padding: var(--sp-xxl);
+    display: grid; grid-template-columns: 1fr 0.85fr;
+    gap: var(--sp-xxl); align-items: center;
+  }
+  .sig-coral  { background: var(--signature-coral);  color: var(--on-primary); }
+  .sig-forest { background: var(--signature-forest); color: var(--on-primary); }
+  .sig-card h2, .sig-card h3 { color: var(--on-primary); }
+  .sig-card .lede { color: rgba(255,255,255,.88); max-width: 42ch; margin-top: var(--sp-md); }
+  .sig-card .actions { margin-top: var(--sp-lg); display: flex; gap: var(--sp-sm); flex-wrap: wrap; }
+
+  /* 제품 UI 조각 대용 — 시그니처 카드 안에 들어가는 밝은 프래그먼트 */
+  .fragment {
+    background: var(--canvas); color: var(--ink);
+    border-radius: var(--r-md);
+    padding: var(--sp-md);
+  }
+  .fragment .frag-head {
+    font-size: var(--fs-caption); font-weight: 500; letter-spacing: 0.16px;
+    color: var(--muted);
+    padding-bottom: var(--sp-sm);
+    border-bottom: 1px solid var(--hairline);
+  }
+  .frag-row {
+    display: flex; align-items: center; gap: var(--sp-sm);
+    padding: var(--sp-sm) 0;
+    border-bottom: 1px solid var(--hairline);
+    font-size: var(--fs-body); color: var(--body);
+  }
+  .frag-row:last-child { border-bottom: 0; padding-bottom: 0; }
+  .frag-chip {
+    flex: none; width: 28px; height: 28px; border-radius: var(--r-sm);
+    display: grid; place-items: center;
+    font-size: 11px; font-weight: 500; color: var(--ink);
+  }
+  .frag-row strong { font-weight: 500; color: var(--ink); }
+  .frag-row .meta { margin-left: auto; font-size: var(--fs-body); color: var(--muted); }
+
+  /* ═══════════ About ═══════════ */
+  .about-grid { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: var(--sp-xxl); align-items: start; }
+  .about-text + .about-text { margin-top: var(--sp-md); }
+  .about-text strong { color: var(--ink); font-weight: 500; }
+
+  .quote-card {
+    background: var(--surface-soft);
+    border-radius: var(--r-lg);
+    padding: var(--sp-xl);
+  }
+  .quote-card .q { font-size: var(--fs-title-md); font-weight: 400; line-height: 1.5; color: var(--ink); }
+  .quote-card small {
+    display: block; margin-top: var(--sp-md);
+    font-size: var(--fs-caption); font-weight: 500; letter-spacing: 0.16px; color: var(--muted);
+  }
+
+  .stats {
+    margin-top: var(--sp-xxl);
+    display: grid; grid-template-columns: repeat(4, 1fr);
+    border-top: 1px solid var(--hairline);
+  }
+  .stat { padding: var(--sp-lg) var(--sp-md) 0 0; }
+  .stat .num { font-size: var(--fs-title-lg); font-weight: 400; line-height: var(--lh-title); color: var(--ink); }
+  .stat .label { margin-top: var(--sp-xxs); font-size: var(--fs-body); color: var(--muted); }
+
+  /* ═══════════ cream-callout band ═══════════ */
+  .cream-band {
+    background: var(--signature-cream);
+    border-radius: var(--r-lg);
+    padding: var(--sp-xxl);
+  }
+  .cream-band h2 { max-width: 20ch; }
+  .cream-band > .lede { max-width: 46ch; margin-top: var(--sp-md); }
+  .cream-grid {
+    margin-top: var(--sp-xl);
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--sp-lg);
+  }
+  .cream-card {
+    background: var(--canvas);
+    border-radius: var(--r-md);
+    padding: var(--sp-lg);
+  }
+  .cream-card .k {
+    font-size: var(--fs-caption); font-weight: 500; letter-spacing: 0.16px;
+    color: var(--muted); margin-bottom: var(--sp-xs);
+  }
+  .cream-card h3 { margin-bottom: var(--sp-xs); }
+
+  /* ═══════════ demo-grid ═══════════ */
+  /* 카드 높이를 일부러 불균일하게 — 스펙시트처럼 보이지 않도록 */
+  .demo-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--sp-lg); align-items: start; }
+  .demo-card {
+    border-radius: var(--r-md);
+    padding: var(--sp-md);
+    display: flex; flex-direction: column; gap: var(--sp-xs);
+    color: var(--ink);
+  }
+  .demo-card .icon { width: 24px; height: 24px; margin-bottom: var(--sp-xs); color: currentColor; }
+  .demo-card .icon svg { width: 100%; height: 100%; display: block; }
+  .demo-card p { font-size: var(--fs-body); line-height: var(--lh-para); }
+  .demo-card .idx { font-size: var(--fs-caption); font-weight: 500; letter-spacing: 0.16px; opacity: .72; }
+  .surface-peach   { background: var(--signature-peach); }
+  .surface-mint    { background: var(--signature-mint); }
+  .surface-yellow  { background: var(--signature-yellow); }
+  .surface-mustard { background: var(--signature-mustard); }
+  .surface-cream   { background: var(--signature-cream); }
+  .surface-forest  { background: var(--signature-forest); color: var(--on-primary); }
+  .surface-forest h3 { color: var(--on-primary); }
+  .pad-lg { padding: var(--sp-lg); }
+  .pad-xl { padding: var(--sp-lg) var(--sp-md) var(--sp-xl); }
+
+  /* ═══════════ article cards (surface-soft band) ═══════════ */
+  .soft-band { background: var(--surface-soft); }
+  .article-grid { margin-top: var(--sp-xl); display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--sp-lg); }
+  .article-card {
+    background: var(--canvas);
+    border-radius: var(--r-md);
+    padding: var(--sp-md);
+    display: flex; flex-direction: column; gap: var(--sp-sm);
+  }
+  .article-card .thumb {
+    aspect-ratio: 16 / 9;
+    border-radius: var(--r-md);
+    display: grid; place-items: center;
+    font-size: var(--fs-title-lg); font-weight: 400; color: var(--ink);
+  }
+  .article-card .cat {
+    font-size: 11px; font-weight: 500; letter-spacing: 0.16px; text-transform: uppercase;
+    color: var(--muted);
+  }
+  .article-card p { font-size: var(--fs-body); line-height: var(--lh-para); }
+  .article-card .meta { margin-top: auto; padding-top: var(--sp-xs); }
+  /* 카드별 대표 영상 한 줄 */
+  .pick { display: flex; flex-direction: column; gap: 2px; }
+  .pick .k {
+    font-size: 11px; font-weight: 500; letter-spacing: 0.16px;
+    text-transform: uppercase; color: var(--muted);
+  }
+  /* 제목이 길어 줄바꿈되므로 화살표를 인라인으로 붙여 마지막 글자를 따라가게 한다 */
+  .pick a { display: inline; line-height: var(--lh-para); }
+  .pick .arrow {
+    display: inline-block; width: 14px; height: 14px;
+    margin-left: 4px; vertical-align: -2px;
+  }
+
+  /* 한 카드에서 유튜브 / 블로그 두 갈래로 나가는 링크 행 */
+  .card-links {
+    margin-top: auto;
+    padding-top: var(--sp-xs);
+    border-top: 1px solid var(--hairline);
+    display: flex; flex-wrap: wrap; gap: 0 var(--sp-md);
+  }
+  .card-links a { min-height: 44px; }
+
+  /* ═══════════ latest feed (update-content.py 가 자동 갱신) ═══════════ */
+  .feed-grid { margin-top: var(--sp-xl); display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--sp-lg); }
+  .feed-col {
+    background: var(--surface-soft);
+    border-radius: var(--r-md);
+    padding: var(--sp-md);
+  }
+  .feed-head {
+    font-size: var(--fs-caption); font-weight: 500; letter-spacing: 0.16px;
+    color: var(--muted);
+    padding-bottom: var(--sp-sm);
+    border-bottom: 1px solid var(--hairline);
+  }
+  .feed-row {
+    display: flex; align-items: baseline; gap: var(--sp-sm);
+    padding: var(--sp-sm) 0;
+    border-bottom: 1px solid var(--hairline);
+  }
+  .feed-row:last-child { border-bottom: 0; padding-bottom: 0; }
+  .feed-link {
+    color: var(--link); font-size: var(--fs-body); line-height: var(--lh-para);
+    min-height: 44px; display: flex; align-items: center;
+  }
+  .feed-link:active { color: var(--link-active); }
+  .feed-row .date {
+    margin-left: auto; flex: none;
+    font-size: var(--fs-caption); color: var(--muted); white-space: nowrap;
+  }
+  .feed-empty { padding: var(--sp-sm) 0; font-size: var(--fs-body); color: var(--muted); }
+  .feed-note { margin-top: var(--sp-md); font-size: var(--fs-caption); color: var(--muted); }
+
+  /* ═══════════ hero-card-dark ═══════════ */
+  .dark-card {
+    background: var(--surface-dark);
+    border-radius: var(--r-lg);
+    padding: var(--sp-xxl);
+    color: var(--on-primary);
+  }
+  .dark-card h2 { color: var(--on-primary); max-width: 22ch; }
+  .dark-card .lede { color: rgba(255,255,255,.82); max-width: 48ch; margin-top: var(--sp-md); }
+  .dark-card .actions { margin-top: var(--sp-xl); display: flex; gap: var(--sp-sm); flex-wrap: wrap; }
+
+  /* ═══════════ cta-band-light ═══════════ */
+  .cta-light {
+    background: var(--surface-strong);
+    border-radius: var(--r-lg);
+    padding: var(--sp-xxl);
+    display: flex; align-items: center; justify-content: space-between;
+    gap: var(--sp-xl); flex-wrap: wrap;
+  }
+  .cta-light h2 { max-width: 22ch; }
+  .cta-light .lede { margin-top: var(--sp-xs); }
+
+  /* ═══════════ footer ═══════════ */
+  footer { border-top: 1px solid var(--hairline); }
+  .footer-top {
+    padding-block: var(--sp-xxl);
+    display: grid; grid-template-columns: 1.4fr repeat(3, 1fr); gap: var(--sp-xl);
+  }
+  .footer-col h4 {
+    font-size: var(--fs-body); font-weight: 500; color: var(--ink);
+    margin-bottom: var(--sp-sm);
+  }
+  .footer-col ul { list-style: none; display: flex; flex-direction: column; }
+  .footer-col a {
+    display: inline-flex; align-items: center; min-height: 36px;
+    font-size: var(--fs-body); color: var(--muted);
+  }
+  .footer-col a:active { color: var(--ink); }
+  .footer-legal {
+    border-top: 1px solid var(--hairline);
+    padding-block: var(--sp-lg) var(--sp-xxl);
+    display: flex; justify-content: space-between; gap: var(--sp-md); flex-wrap: wrap;
+    font-size: var(--fs-body); color: var(--muted);
+  }
+
+  /* ═══════════ button-icon-circular ═══════════ */
+  .to-top {
+    position: fixed; right: var(--sp-lg); bottom: var(--sp-lg); z-index: 90;
+    width: 40px; height: 40px; border-radius: var(--r-full);
+    display: grid; place-items: center;
+    border: 1px solid var(--hairline);
+    background: var(--canvas); color: var(--ink);
+    cursor: pointer;
+    opacity: 0; pointer-events: none; transform: translateY(10px);
+    transition: opacity .3s var(--ease), transform .3s var(--ease), background .18s var(--ease);
+  }
+  .to-top:active { background: var(--surface-soft); }
+  .to-top.show { opacity: 1; pointer-events: auto; transform: translateY(0); }
+  .to-top svg { width: 18px; height: 18px; display: block; }
+
+  /* ── Reveal ── */
+  .reveal { opacity: 0; transform: translateY(12px); }
+  .reveal.in {
+    opacity: 1; transform: none;
+    transition: opacity .48s var(--ease), transform .48s var(--ease);
+    transition-delay: var(--d, 0ms);
+  }
+
+  /* ═══════════ Responsive ═══════════ */
+  @media (max-width: 1024px) {
+    .sig-card { grid-template-columns: 1fr; gap: var(--sp-xl); }
+    .about-grid { grid-template-columns: 1fr; gap: var(--sp-xl); }
+    .demo-grid { grid-template-columns: repeat(2, 1fr); }
+    .article-grid { grid-template-columns: repeat(2, 1fr); }
+    .cream-grid { grid-template-columns: repeat(2, 1fr); }
+    .footer-top { grid-template-columns: 1fr 1fr; }
+  }
+
+  @media (max-width: 768px) {
+    :root { --sp-section: 64px; }
+
+    .nav { position: relative; }
+    .nav-toggle { display: flex; }
+    .nav-inner { justify-content: space-between; gap: var(--sp-md); }
+    .nav-right .nav-text-link { display: none; }
+    .nav-links {
+      position: absolute; top: 100%; left: 0; right: 0;
+      flex-direction: column; align-items: stretch; gap: 0;
+      background: var(--canvas);
+      border-bottom: 1px solid var(--hairline);
+      max-height: 0; overflow: hidden; visibility: hidden;
+      transition: max-height .4s var(--ease), visibility 0s linear .4s;
+    }
+    .nav.open .nav-links {
+      max-height: 70svh; visibility: visible;
+      transition: max-height .4s var(--ease), visibility 0s;
+    }
+    .nav-links li { border-top: 1px solid var(--hairline); }
+    .nav-links a { display: flex; width: 100%; padding: var(--sp-sm) var(--gutter); font-size: var(--fs-label-md); }
+
+    .sig-card, .cream-band, .dark-card, .cta-light { padding: var(--sp-lg); }
+    .demo-grid, .article-grid, .cream-grid, .feed-grid { grid-template-columns: 1fr; }
+    .stats { grid-template-columns: repeat(2, 1fr); }
+    .stat { padding-right: var(--sp-sm); }
+    .footer-top { grid-template-columns: 1fr; gap: var(--sp-lg); }
+    .hero-links .btn { flex: 1 1 auto; }
+    .to-top { right: var(--sp-md); bottom: var(--sp-md); }
+  }
+
+  @media (forced-colors: active) {
+    .btn, .demo-card, .article-card, .sig-card, .cream-band, .dark-card, .cta-light {
+      border: 1px solid CanvasText;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    *, *::before, *::after { animation: none !important; transition-duration: .01ms !important; }
+    .reveal { opacity: 1; transform: none; }
+  }
+</style>
+</head>
+<body>
+
+<a href="#about" class="skip">본문 바로가기</a>
+
+<nav class="nav" id="nav">
+  <div class="nav-inner">
+    <a href="#" class="brand">
+      <span class="brand-mark">빈</span>
+      <span class="brand-name">빈이아빠<span class="brand-sub">Chronos Arche</span></span>
+    </a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#about">소개</a></li>
+      <li><a href="#topics">주제</a></li>
+      <li><a href="#contents">콘텐츠</a></li>
+      <li><a href="#latest">최신</a></li>
+      <li><a href="#contact">연락처</a></li>
+    </ul>
+    <div class="nav-right">
+      <a href="https://ruvinfather.com" target="_blank" rel="noopener" class="nav-text-link">블로그</a>
+      <a href="https://www.youtube.com/@ChronosArche_ruvinpapa" target="_blank" rel="noopener" class="btn btn-primary nav-cta">채널 구독</a>
+      <button class="nav-toggle" id="navToggle" aria-label="메뉴 열기" aria-expanded="false" aria-controls="navLinks">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<!-- ═══ Band 1 · hero-band (canvas) ═══ -->
+<header class="shell">
+  <div class="hero">
+    <div class="avatar reveal">빈</div>
+    <div class="eyebrow reveal" style="--d:40ms">지식 크리에이터 · History / Science / Economy</div>
+    <h1 class="display-lg reveal" style="--d:80ms">안녕하세요, 빈이아빠입니다</h1>
+    <p class="lede reveal" style="--d:120ms">
+      세상을 움직인 역사, 세상을 바꾼 과학, 그리고 세상을 지배하는 금융의 원리를
+      매주 한 편의 이야기로 정리해 전합니다.
+    </p>
+    <div class="hero-links reveal" style="--d:160ms">
+      <a href="#contents" class="btn btn-primary">콘텐츠 보기</a>
+      <a href="#contact" class="btn btn-secondary">연락하기</a>
+    </div>
+  </div>
+
+  <div class="logo-strip">
+    <span class="caption">다루는 영역</span>
+    <ul>
+      <li>역사</li><li>과학</li><li>경제</li><li>금융</li><li>문명</li><li>기술</li>
+    </ul>
+  </div>
+</header>
+
+<!-- ═══ Band 2 · signature coral card ═══ -->
+<div class="band">
+  <div class="shell">
+    <div class="sig-card sig-coral reveal">
+      <div>
+        <h2 class="display-md">과거를 읽고, 원리를 이해하고, 미래를 준비합니다</h2>
+        <p class="lede">
+          한 편의 영상은 사건의 나열이 아니라 하나의 질문에서 출발합니다.
+          왜 그때 그 선택이 가능했는지, 그 원리가 지금 우리에게 무엇을 말하는지까지 따라갑니다.
+        </p>
+        <div class="actions">
+          <a href="https://www.youtube.com/@ChronosArche_ruvinpapa" target="_blank" rel="noopener" class="btn btn-on-dark">
+            <span class="icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" focusable="false">
+                <rect x="2.75" y="5" width="18.5" height="14" rx="3.5"/><path d="m10.25 9.25 5 2.75-5 2.75z"/>
+              </svg>
+            </span>
+            유튜브에서 보기
+          </a>
+        </div>
+      </div>
+      <div class="fragment" aria-hidden="true">
+        <div class="frag-head">이번 주 다루는 이야기</div>
+        <!-- AUTO:frag -->
+        <div class="frag-row">
+          <span class="frag-chip surface-peach">史</span>
+          <strong>당 최강 정예군은 왜 안시성 흙벽 앞에서 멈췄나</strong>
+          <span class="meta">역사</span>
+        </div>
+        <div class="frag-row">
+          <span class="frag-chip surface-mint">科</span>
+          <strong>4.2광년 앞마당의 외계 생명체?</strong>
+          <span class="meta">과학</span>
+        </div>
+        <div class="frag-row">
+          <span class="frag-chip surface-yellow">經</span>
+          <strong>사과 농부 이야기로 3분 만에 끝내는 커버드콜 원리</strong>
+          <span class="meta">경제 · 블로그</span>
+        </div>
+        <!-- /AUTO:frag -->
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ Band 3 · About (canvas, editorial) ═══ -->
+<section id="about" class="band shell">
+  <div class="eyebrow reveal">About</div>
+  <h2 class="display-md reveal" style="--d:40ms">저를 소개합니다</h2>
+
+  <div class="about-grid" style="margin-top: var(--sp-xl);">
+    <div class="reveal" style="--d:80ms">
+      <p class="about-text lede">
+        안녕하세요! 저는 <strong>유튜버 겸 블로거 빈이아빠</strong>입니다.
+        인류 문명을 뒤흔든 결정적인 역사적 순간들, 우주와 일상을 지배하는 과학의 법칙,
+        그리고 자본주의의 흐름을 읽는 실전 금융·경제 인사이트를 알기 쉽게 전달합니다.
+      </p>
+      <p class="about-text lede">
+        과거의 역사에서 지혜를 얻고, 현대의 과학에서 원리를 이해하며, 금융을 통해 미래를 준비하는
+        <strong>지식 아카이브</strong>가 되겠습니다.
+      </p>
+    </div>
+    <div class="quote-card reveal" style="--d:120ms">
+      <p class="q">“과거를 읽고, 원리를 이해하고, 미래를 준비한다.”</p>
+      <small>Chronos Arche</small>
+    </div>
+  </div>
+
+  <div class="stats reveal" style="--d:160ms">
+    <div class="stat"><div class="num">역사</div><div class="label">History</div></div>
+    <div class="stat"><div class="num">과학</div><div class="label">Science</div></div>
+    <div class="stat"><div class="num">경제</div><div class="label">Economy</div></div>
+    <div class="stat"><div class="num">매주</div><div class="label">지식 콘텐츠 업로드</div></div>
+  </div>
+</section>
+
+<!-- ═══ Band 4 · cream callout ═══ -->
+<div class="band" style="padding-top: 0;">
+  <div class="shell">
+    <div class="cream-band reveal">
+      <h2 class="display-md">어려운 이야기를 쉬운 순서로 바꾸는 법</h2>
+      <p class="lede">세 가지 원칙으로 한 편을 만듭니다. 사실은 출처로, 설명은 순서로, 결론은 오늘의 질문으로.</p>
+      <div class="cream-grid">
+        <div class="cream-card">
+          <div class="k">01</div>
+          <h3 class="label-md">사실은 출처로</h3>
+          <p class="lede">원문과 1차 자료를 먼저 확인하고, 확인되지 않은 이야기는 그렇다고 밝힙니다.</p>
+        </div>
+        <div class="cream-card">
+          <div class="k">02</div>
+          <h3 class="label-md">설명은 순서로</h3>
+          <p class="lede">용어를 먼저 풀고, 원리를 세운 뒤 사례로 내려옵니다. 배경지식이 없어도 따라올 수 있게.</p>
+        </div>
+        <div class="cream-card">
+          <div class="k">03</div>
+          <h3 class="label-md">결론은 질문으로</h3>
+          <p class="lede">정답을 주는 대신, 오늘의 뉴스에 바로 대볼 수 있는 질문 하나를 남깁니다.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ Band 5 · demo-grid (canvas + pastel surfaces) ═══ -->
+<section id="topics" class="band shell" style="padding-top: 0;">
+  <div class="eyebrow reveal">Topics</div>
+  <h2 class="display-md reveal" style="--d:40ms">주로 다루는 주제</h2>
+
+  <div class="demo-grid" style="margin-top: var(--sp-xl);">
+    <div class="demo-card surface-peach pad-lg reveal">
+      <span class="idx">01</span>
+      <span class="icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" focusable="false">
+          <path d="M2.75 4.5h18.5"/><path d="M5 4.5v2.75h14V4.5"/>
+          <path d="M8.5 7.25v9.5M12 7.25v9.5M15.5 7.25v9.5"/>
+          <path d="M5 16.75v2.75h14v-2.75"/><path d="M2.75 19.5h18.5"/>
+        </svg>
+      </span>
+      <h3 class="label-md">역사</h3>
+      <p>역사의 분기점이 된 사건과 인물들의 비하인드 스토리</p>
+    </div>
+
+    <div class="demo-card surface-mint pad-xl reveal" style="--d:40ms">
+      <span class="idx">02</span>
+      <span class="icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" focusable="false">
+          <circle cx="12" cy="12" r="2.15"/>
+          <ellipse cx="12" cy="12" rx="9" ry="3.9" transform="rotate(30 12 12)"/>
+          <ellipse cx="12" cy="12" rx="9" ry="3.9" transform="rotate(-30 12 12)"/>
+        </svg>
+      </span>
+      <h3 class="label-md">과학</h3>
+      <p>문명을 진화시킨 핵심 기술과 흥미로운 과학 원리</p>
+    </div>
+
+    <div class="demo-card surface-forest pad-xl reveal" style="--d:80ms">
+      <span class="idx">03</span>
+      <span class="icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" focusable="false">
+          <path d="M3.25 3.5v16.25a.5.5 0 0 0 .5.5H20.5"/>
+          <path d="M6.75 16.25 10.5 11.5l3.25 2.75 5.5-6.5"/>
+          <path d="M15.75 7.75h3.5v3.5"/>
+        </svg>
+      </span>
+      <h3 class="label-md">경제</h3>
+      <p>글로벌 경제의 흐름, 금융의 역사, 자본과 투자의 기초 원리</p>
+    </div>
+
+    <div class="demo-card surface-cream pad-xl reveal" style="--d:120ms">
+      <span class="idx">04</span>
+      <span class="icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" focusable="false">
+          <rect x="2.75" y="6.25" width="13" height="11.5" rx="1.75"/>
+          <path d="m15.75 10.75 5.5-3.25v9l-5.5-3.25z"/>
+        </svg>
+      </span>
+      <h3 class="label-md">유튜브 콘텐츠 제작</h3>
+      <p>기획부터 촬영, 편집까지 직접 진행</p>
+    </div>
+
+    <div class="demo-card surface-mustard pad-lg reveal" style="--d:160ms">
+      <span class="idx">05</span>
+      <span class="icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" focusable="false">
+          <rect x="2.75" y="4.25" width="18.5" height="3.75" rx="1"/>
+          <path d="M4.5 8v10.25a1.5 1.5 0 0 0 1.5 1.5h12a1.5 1.5 0 0 0 1.5-1.5V8"/>
+          <path d="M9.75 11.75h4.5"/>
+        </svg>
+      </span>
+      <h3 class="label-md">블로그 아카이빙</h3>
+      <p>경제·투자 이야기를 글로 정리해 연재</p>
+    </div>
+
+    <div class="demo-card surface-yellow pad-lg reveal" style="--d:200ms">
+      <span class="idx">06</span>
+      <span class="icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" focusable="false">
+          <circle cx="9" cy="8.25" r="3.25"/>
+          <path d="M3.25 19.75a5.75 5.75 0 0 1 11.5 0"/>
+          <path d="M16 5.4a3.25 3.25 0 0 1 0 5.7"/>
+          <path d="M17.25 14.75a5.75 5.75 0 0 1 3.5 5"/>
+        </svg>
+      </span>
+      <h3 class="label-md">소통 &amp; 커뮤니티</h3>
+      <p>구독자와 함께 만들어가는 지식 아카이브</p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ Band 6 · article cards on surface-soft ═══ -->
+<section id="contents" class="soft-band">
+  <div class="band shell">
+    <div class="eyebrow reveal">Contents</div>
+    <h2 class="display-md reveal" style="--d:40ms">대표 콘텐츠</h2>
+    <p class="lede reveal" style="--d:60ms; margin-top: var(--sp-sm); max-width: 46ch;">
+      역사와 과학은 유튜브에서, 경제는 유튜브와 블로그 양쪽에서 이어집니다.
+    </p>
+
+    <div class="article-grid">
+      <article class="article-card reveal">
+        <div class="thumb surface-peach" aria-hidden="true">History</div>
+        <span class="cat">역사 · History</span>
+        <h3 class="title-sm">역사의 결정적 순간들</h3>
+        <p>인류 문명을 뒤흔든 사건과 인물들의 비하인드 스토리를 다룹니다.</p>
+        <!-- AUTO:pick-history -->
+        <p class="pick">
+          <span class="k">대표 영상 · 조회수 28,596회</span>
+          <a class="text-link" href="https://www.youtube.com/watch?v=doIzLpDyp4M" target="_blank" rel="noopener">
+            당 최강 정예군은 왜 안시성 흙벽 앞에서 멈췄나 — 축성 공학과 보급 경제학
+            <span class="arrow" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" focusable="false">
+                <path d="M4.75 12h14.5"/><path d="m13.5 6.25 5.75 5.75-5.75 5.75"/>
+              </svg>
+            </span>
+          </a>
+        </p>
+        <!-- /AUTO:pick-history -->
+        <div class="card-links">
+          <a class="text-link" href="https://www.youtube.com/@ChronosArche_ruvinpapa/search?query=%EC%97%AD%EC%82%AC" target="_blank" rel="noopener">
+            유튜브 역사 영상 전체
+            <span class="arrow" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" focusable="false">
+                <path d="M4.75 12h14.5"/><path d="m13.5 6.25 5.75 5.75-5.75 5.75"/>
+              </svg>
+            </span>
+          </a>
+        </div>
+      </article>
+
+      <article class="article-card reveal" style="--d:60ms">
+        <div class="thumb surface-mint" aria-hidden="true">Science</div>
+        <span class="cat">과학 · Science</span>
+        <h3 class="title-sm">우주와 일상의 과학 원리</h3>
+        <p>문명을 진화시킨 핵심 기술과 과학 법칙을 차근히 풀어냅니다.</p>
+        <!-- AUTO:pick-science -->
+        <p class="pick">
+          <span class="k">대표 영상 · 조회수 7,096회</span>
+          <a class="text-link" href="https://www.youtube.com/watch?v=Qf-WE4qnLmg" target="_blank" rel="noopener">
+            4.2광년 앞마당의 외계 생명체? — 프록시마 b의 자기장 방패와 1억 달러 베팅
+            <span class="arrow" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" focusable="false">
+                <path d="M4.75 12h14.5"/><path d="m13.5 6.25 5.75 5.75-5.75 5.75"/>
+              </svg>
+            </span>
+          </a>
+        </p>
+        <!-- /AUTO:pick-science -->
+        <div class="card-links">
+          <a class="text-link" href="https://www.youtube.com/@ChronosArche_ruvinpapa/search?query=%EA%B3%BC%ED%95%99" target="_blank" rel="noopener">
+            유튜브 과학 영상 전체
+            <span class="arrow" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" focusable="false">
+                <path d="M4.75 12h14.5"/><path d="m13.5 6.25 5.75 5.75-5.75 5.75"/>
+              </svg>
+            </span>
+          </a>
+        </div>
+      </article>
+
+      <article class="article-card reveal" style="--d:120ms">
+        <div class="thumb surface-mustard" aria-hidden="true">Economy</div>
+        <span class="cat">경제 · Economy</span>
+        <h3 class="title-sm">자본주의를 읽는 경제 이야기</h3>
+        <p>글로벌 경제의 흐름과 금융의 역사, 투자의 기초 원리를 다룹니다. 블로그는 전부 경제·투자 기록입니다.</p>
+        <!-- AUTO:pick-economy -->
+        <p class="pick">
+          <span class="k">대표 영상 · 조회수 106회</span>
+          <a class="text-link" href="https://www.youtube.com/watch?v=WXmQfaNmfqg" target="_blank" rel="noopener">
+            아버지는 나라를 팔았고, 아들은 밥상을 지켰다 | 우장춘과 종자 주권의 경제학
+            <span class="arrow" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" focusable="false">
+                <path d="M4.75 12h14.5"/><path d="m13.5 6.25 5.75 5.75-5.75 5.75"/>
+              </svg>
+            </span>
+          </a>
+        </p>
+        <p class="pick">
+          <span class="k">대표 글</span>
+          <a class="text-link" href="https://ruvinfather.com/entry/%EC%82%AC%EA%B3%BC-%EB%86%8D%EB%B6%80-%EC%9D%B4%EC%95%BC%EA%B8%B0%EB%A1%9C-3%EB%B6%84-%EB%A7%8C%EC%97%90-%EB%81%9D%EB%82%B4%EB%8A%94-%EC%BB%A4%EB%B2%84%EB%93%9C%EC%BD%9C-%EC%9B%90%EB%A6%AC-%EC%83%81%EC%8A%B9%EC%9E%A5%EC%97%90%EC%84%9C-%EB%82%B4-%EC%82%B4%EC%9D%84-%EA%B9%8E%EB%8A%94-%EC%9D%B4" target="_blank" rel="noopener">
+            사과 농부 이야기로 3분 만에 끝내는 커버드콜 원리: 상승장에서 내 살을 깎는 이
+            <span class="arrow" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" focusable="false">
+                <path d="M4.75 12h14.5"/><path d="m13.5 6.25 5.75 5.75-5.75 5.75"/>
+              </svg>
+            </span>
+          </a>
+        </p>
+        <!-- /AUTO:pick-economy -->
+        <div class="card-links">
+          <a class="text-link" href="https://www.youtube.com/@ChronosArche_ruvinpapa/search?query=%EA%B2%BD%EC%A0%9C" target="_blank" rel="noopener">
+            유튜브 경제 영상 전체
+            <span class="arrow" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" focusable="false">
+                <path d="M4.75 12h14.5"/><path d="m13.5 6.25 5.75 5.75-5.75 5.75"/>
+              </svg>
+            </span>
+          </a>
+          <a class="text-link" href="https://ruvinfather.com" target="_blank" rel="noopener">
+            경제 블로그 전체
+            <span class="arrow" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" focusable="false">
+                <path d="M4.75 12h14.5"/><path d="m13.5 6.25 5.75 5.75-5.75 5.75"/>
+              </svg>
+            </span>
+          </a>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ Band 6.5 · 최신 업로드 (자동 갱신 구역) ═══ -->
+<section id="latest" class="band shell">
+  <div class="eyebrow reveal">Latest</div>
+  <h2 class="display-md reveal" style="--d:40ms">최근 올라온 이야기</h2>
+  <p class="lede reveal" style="--d:60ms; margin-top: var(--sp-sm); max-width: 46ch;">
+    채널과 블로그에 새 콘텐츠가 올라오면 이 목록이 함께 갱신됩니다.
+  </p>
+
+  <div class="feed-grid">
+    <div class="feed-col reveal" style="--d:80ms">
+      <div class="feed-head">유튜브 최신 영상</div>
+      <!-- AUTO:latest-videos -->
+      <div class="feed-row">
+        <a class="feed-link" href="https://www.youtube.com/watch?v=Qf-WE4qnLmg" target="_blank" rel="noopener">4.2광년 앞마당의 외계 생명체? — 프록시마 b의 자기장 방패와 1억 달러 베팅</a>
+        <span class="date">09.13</span>
+      </div>
+      <div class="feed-row">
+        <a class="feed-link" href="https://www.youtube.com/watch?v=doIzLpDyp4M" target="_blank" rel="noopener">당 최강 정예군은 왜 안시성 흙벽 앞에서 멈췄나 — 축성 공학과 보급 경제학</a>
+        <span class="date">09.10</span>
+      </div>
+      <div class="feed-row">
+        <a class="feed-link" href="https://www.youtube.com/watch?v=WXmQfaNmfqg" target="_blank" rel="noopener">아버지는 나라를 팔았고, 아들은 밥상을 지켰다 | 우장춘과 종자 주권의 경제학</a>
+        <span class="date">09.06</span>
+      </div>
+      <!-- /AUTO:latest-videos -->
+    </div>
+    <div class="feed-col reveal" style="--d:120ms">
+      <div class="feed-head">블로그 최신 글</div>
+      <!-- AUTO:latest-posts -->
+      <div class="feed-row">
+        <a class="feed-link" href="https://ruvinfather.com/entry/%EC%82%AC%EA%B3%BC-%EB%86%8D%EB%B6%80-%EC%9D%B4%EC%95%BC%EA%B8%B0%EB%A1%9C-3%EB%B6%84-%EB%A7%8C%EC%97%90-%EB%81%9D%EB%82%B4%EB%8A%94-%EC%BB%A4%EB%B2%84%EB%93%9C%EC%BD%9C-%EC%9B%90%EB%A6%AC-%EC%83%81%EC%8A%B9%EC%9E%A5%EC%97%90%EC%84%9C-%EB%82%B4-%EC%82%B4%EC%9D%84-%EA%B9%8E%EB%8A%94-%EC%9D%B4" target="_blank" rel="noopener">사과 농부 이야기로 3분 만에 끝내는 커버드콜 원리: 상승장에서 내 살을 깎는 이</a>
+        <span class="date">09.17</span>
+      </div>
+      <div class="feed-row">
+        <a class="feed-link" href="https://ruvinfather.com/entry/30-%EB%A8%B9%EA%B3%A0-%ED%8C%94%EB%A9%B4-%EB%85%B8%ED%9B%84-%EC%A4%80%EB%B9%84-%EB%90%A9%EB%8B%88%EA%B9%8C-%EC%A1%B4%EB%A6%AC%EA%B0%80-%EB%B0%9D%ED%9E%8C-ETF%EB%A5%BC-%EC%A0%88%EB%8C%80-%ED%8C%94%EB%A9%B4-%EC%95%88-%EB%90%98%EB%8A%94-%EB%8B%A8-%ED%95%98%EB%82%98%EC%9D%98-%EC%9D%B4%EC%9C%A0" target="_blank" rel="noopener">&quot;30% 먹고 팔면 노후 준비 됩니까?&quot; 존리가 밝힌 ETF를 절대 팔면 안 되는 단 하나의 이유</a>
+        <span class="date">09.16</span>
+      </div>
+      <div class="feed-row">
+        <a class="feed-link" href="https://ruvinfather.com/entry/%ED%99%98%EC%9C%A8-1350%EC%9B%90%EB%8C%80-%ED%8F%AD%EB%9D%BD%EC%97%90-%EC%84%9C%ED%95%99%EA%B0%9C%EB%AF%B8-SGOV-1%EC%9C%84-%EC%8B%B9%EC%93%B8%EC%9D%B4-%ED%99%98%EC%B0%A8%EC%86%90-%EC%9D%B4%EA%B8%B0%EB%8A%94-%EB%8B%AC%EB%9F%AC-%ED%8C%8C%ED%82%B9-%EA%B3%B5%EC%8B%9D" target="_blank" rel="noopener">환율 1,350원대 폭락에 서학개미 &#x27;SGOV&#x27; 1위 싹쓸이! 환차손 이기는 달러 파킹 공식</a>
+        <span class="date">09.15</span>
+      </div>
+      <!-- /AUTO:latest-posts -->
+    </div>
+  </div>
+
+  <p class="feed-note reveal">마지막 갱신 · <!-- AUTO:updated -->2026-09-17 22:32<!-- /AUTO:updated --></p>
+</section>
+
+<!-- ═══ Band 7 · hero-card-dark (contact) ═══ -->
+<section id="contact" class="band shell">
+  <div class="dark-card reveal">
+    <div class="eyebrow" style="color: rgba(255,255,255,.72);">Contact</div>
+    <h2 class="display-md">한 편의 이야기를 함께 만들 분을 찾습니다</h2>
+    <p class="lede">
+      매주 역사·과학·경제 이야기로 찾아옵니다.
+      주제 제보와 사실관계 정정, 비즈니스 및 제휴 문의를 이메일로 받습니다.
+    </p>
+    <div class="actions">
+      <a href="mailto:sparrow9141121@gmail.com" class="btn btn-on-dark">
+        <span class="icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" focusable="false">
+            <rect x="2.75" y="5.25" width="18.5" height="13.5" rx="2"/>
+            <path d="m3.5 7 7.4 5.4a2 2 0 0 0 2.2 0L20.5 7"/>
+          </svg>
+        </span>
+        이메일 보내기
+      </a>
+      <a href="https://www.youtube.com/@ChronosArche_ruvinpapa" target="_blank" rel="noopener" class="btn btn-on-dark">
+        <span class="icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" focusable="false">
+            <rect x="2.75" y="5" width="18.5" height="14" rx="3.5"/>
+            <path d="m10.25 9.25 5 2.75-5 2.75z"/>
+          </svg>
+        </span>
+        유튜브
+      </a>
+      <a href="https://ruvinfather.com" target="_blank" rel="noopener" class="btn btn-on-dark">
+        <span class="icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" focusable="false">
+            <path d="M19.25 11.5v7.25a1.5 1.5 0 0 1-1.5 1.5H5.25a1.5 1.5 0 0 1-1.5-1.5V6.25a1.5 1.5 0 0 1 1.5-1.5h7.25"/>
+            <path d="M17.6 3.4a1.98 1.98 0 0 1 2.8 2.8l-7.5 7.5-3.5.7.7-3.5z"/>
+          </svg>
+        </span>
+        경제 블로그
+      </a>
+      <a href="https://www.instagram.com/91.41/" target="_blank" rel="noopener" class="btn btn-on-dark">
+        <span class="icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" focusable="false">
+            <rect x="3.25" y="3.25" width="17.5" height="17.5" rx="5"/>
+            <circle cx="12" cy="12" r="4.25"/>
+            <circle cx="17.1" cy="6.9" r=".9" fill="currentColor" stroke="none"/>
+          </svg>
+        </span>
+        인스타그램
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ Band 8 · cta-band-light ═══ -->
+<div class="shell" style="padding-bottom: var(--sp-section);">
+  <div class="cta-light reveal">
+    <div>
+      <h2 class="display-md">매주 한 편, 지식 아카이브를 받아보세요</h2>
+      <p class="lede">구독하면 새 영상이 올라올 때 가장 먼저 알림을 받습니다.</p>
+    </div>
+    <a href="https://www.youtube.com/@ChronosArche_ruvinpapa" target="_blank" rel="noopener" class="btn btn-primary">채널 구독하기</a>
+  </div>
+</div>
+
+<!-- ═══ footer ═══ -->
+<footer>
+  <div class="shell">
+    <div class="footer-top">
+      <div class="footer-col">
+        <a href="#" class="brand" style="margin-bottom: var(--sp-sm);">
+          <span class="brand-mark">빈</span>
+          <span class="brand-name">빈이아빠<span class="brand-sub">Chronos Arche</span></span>
+        </a>
+        <p class="lede" style="max-width: 32ch; color: var(--muted);">
+          역사에서 지혜를, 과학에서 원리를, 경제에서 질서를 읽습니다.
+        </p>
+      </div>
+      <div class="footer-col">
+        <h4>둘러보기</h4>
+        <ul>
+          <li><a href="#about">소개</a></li>
+          <li><a href="#topics">주제</a></li>
+          <li><a href="#contents">콘텐츠</a></li>
+          <li><a href="#latest">최신</a></li>
+          <li><a href="#contact">연락처</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>채널</h4>
+        <ul>
+          <li><a href="https://www.youtube.com/@ChronosArche_ruvinpapa" target="_blank" rel="noopener">유튜브</a></li>
+          <li><a href="https://ruvinfather.com" target="_blank" rel="noopener">경제 블로그</a></li>
+          <li><a href="https://www.instagram.com/91.41/" target="_blank" rel="noopener">인스타그램</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>문의</h4>
+        <ul>
+          <li><a href="mailto:sparrow9141121@gmail.com">이메일</a></li>
+          <li><a href="mailto:sparrow9141121@gmail.com">제휴 · 광고</a></li>
+          <li><a href="mailto:sparrow9141121@gmail.com">주제 제보</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-legal">
+      <span>© 2026 빈이아빠. All rights reserved.</span>
+      <span>Seoul, Korea</span>
+    </div>
+  </div>
+</footer>
+
+<button class="to-top" id="toTop" aria-label="맨 위로">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+    <path d="M12 19.25V5.25"/><path d="m5.75 11.5 6.25-6.25 6.25 6.25"/>
+  </svg>
+</button>
+
+<script>
+  var nav = document.getElementById('nav');
+  var navLinks = document.getElementById('navLinks');
+  var toggle = document.getElementById('navToggle');
+  var toTop = document.getElementById('toTop');
+  var mqMobile = window.matchMedia('(max-width: 768px)');
+
+  /* ── Scroll state: 스크롤 시 헤어라인 하단선만 켠다 ── */
+  var ticking = false;
+  function onScroll() {
+    if (ticking) return;
+    ticking = true;
+    window.requestAnimationFrame(function () {
+      var y = window.pageYOffset;
+      nav.classList.toggle('scrolled', y > 8);
+      toTop.classList.toggle('show', y > 600);
+      ticking = false;
+    });
+  }
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+
+  /* ── Mobile menu ── */
+  function setMenu(open) {
+    nav.classList.toggle('open', open);
+    document.body.classList.toggle('menu-open', open);
+    toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+    toggle.setAttribute('aria-label', open ? '메뉴 닫기' : '메뉴 열기');
+    if (mqMobile.matches) { navLinks.toggleAttribute('inert', !open); }
+    else { navLinks.removeAttribute('inert'); }
+  }
+  function syncMenu() {
+    if (mqMobile.matches) { setMenu(nav.classList.contains('open')); }
+    else { setMenu(false); }
+  }
+  syncMenu();
+
+  toggle.addEventListener('click', function () { setMenu(!nav.classList.contains('open')); });
+
+  Array.prototype.forEach.call(navLinks.querySelectorAll('a'), function (a) {
+    a.addEventListener('click', function () { setMenu(false); });
+  });
+
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && nav.classList.contains('open')) { setMenu(false); toggle.focus(); }
+  });
+
+  if (mqMobile.addEventListener) { mqMobile.addEventListener('change', syncMenu); }
+  else if (mqMobile.addListener) { mqMobile.addListener(syncMenu); }
+
+  /* ── To top ── */
+  toTop.addEventListener('click', function () { window.scrollTo({ top: 0, behavior: 'smooth' }); });
+
+  /* ── Reveal ── */
+  var items = document.querySelectorAll('.reveal');
+  if ('IntersectionObserver' in window) {
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -8% 0px' });
+    Array.prototype.forEach.call(items, function (el) { io.observe(el); });
+  } else {
+    Array.prototype.forEach.call(items, function (el) { el.classList.add('in'); });
+  }
+</script>
+
+</body>
+</html>

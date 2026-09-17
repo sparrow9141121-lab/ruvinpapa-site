@@ -1,0 +1,49 @@
+# 매일 아침 유튜브 채널과 티스토리 블로그를 읽어 index.html 을 갱신하고,
+# 바뀐 내용이 있을 때만 커밋합니다. (GitHub Pages 는 커밋되면 자동 재배포)
+name: 콘텐츠 자동 갱신
+
+on:
+  schedule:
+    # UTC 기준입니다. 23:00 UTC = 한국 시간 아침 08:00
+    - cron: "0 23 * * *"
+  workflow_dispatch:        # 저장소 Actions 탭에서 손으로도 돌릴 수 있게
+
+permissions:
+  contents: write
+
+concurrency:
+  group: update-content
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 저장소 가져오기
+        uses: actions/checkout@v4
+
+      - name: 파이썬 준비
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: 유튜브 · 블로그 내용 읽어 index.html 갱신
+        id: refresh
+        continue-on-error: true      # 유튜브가 일시적으로 막아도 워크플로를 실패로 남기지 않는다
+        run: python update-content.py
+
+      - name: 바뀐 내용이 있으면 커밋
+        run: |
+          if git diff --quiet -- index.html; then
+            echo "바뀐 내용이 없어 커밋하지 않습니다."
+            exit 0
+          fi
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html
+          git commit -m "콘텐츠 자동 갱신 ($(TZ=Asia/Seoul date '+%Y-%m-%d %H:%M'))"
+          git push
+
+      - name: 갱신 실패를 로그에 남기기
+        if: steps.refresh.outcome == 'failure'
+        run: echo "::warning::update-content.py 가 이번에는 실패했습니다. index.html 은 이전 상태 그대로입니다."

@@ -1,0 +1,10 @@
+# 자동 갱신 직전 백업본 (저장소에 올릴 필요 없음)
+index.bak.html
+
+# 예전 버전 보관 파일
+index.backup.html
+index.pre-airtable.*.html
+
+# 파이썬 부산물
+__pycache__/
+*.pyc
