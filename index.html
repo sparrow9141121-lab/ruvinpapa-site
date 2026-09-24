@@ -53,6 +53,7 @@
     --signature-mint:    #a8d8c4;
     --signature-yellow:  #f4d35e;
     --signature-mustard: #d9a441;
+    --signature-night:   #1c2340;   /* 자매 채널 초저녁야담 — 해 진 뒤의 남색 */
 
     /* ── Semantic ── */
     --link:        #1b61c9;   /* 링크 색. primary 버튼 색이 아니다 */
@@ -314,6 +315,13 @@
   }
   .sig-coral  { background: var(--signature-coral);  color: var(--on-primary); }
   .sig-forest { background: var(--signature-forest); color: var(--on-primary); }
+  .sig-night  { background: var(--signature-night);  color: var(--on-primary); }
+  .sig-card .eyebrow { color: rgba(255,255,255,.72); }
+  .sig-card .slot {
+    margin-top: var(--sp-md);
+    font-size: var(--fs-caption); font-weight: 500; letter-spacing: 0.16px;
+    color: rgba(255,255,255,.72);
+  }
   .sig-card h2, .sig-card h3 { color: var(--on-primary); }
   .sig-card .lede { color: rgba(255,255,255,.88); max-width: 42ch; margin-top: var(--sp-md); }
   .sig-card .actions { margin-top: var(--sp-lg); display: flex; gap: var(--sp-sm); flex-wrap: wrap; }
@@ -635,6 +643,7 @@
       <li><a href="#about">소개</a></li>
       <li><a href="#topics">주제</a></li>
       <li><a href="#contents">콘텐츠</a></li>
+      <li><a href="#yadam">야담</a></li>
       <li><a href="#latest">최신</a></li>
       <li><a href="#contact">연락처</a></li>
     </ul>
@@ -983,6 +992,42 @@
   </div>
 </section>
 
+<!-- ═══ Band 6.3 · 자매 채널 초저녁야담 (최신 에피소드 자동 갱신) ═══ -->
+<section id="yadam" class="band">
+  <div class="shell">
+    <div class="sig-card sig-night reveal">
+      <div>
+        <div class="eyebrow">Sister Channel</div>
+        <h2 class="display-md">초저녁에 시작해, 스르르 잠드는 이야기</h2>
+        <p class="lede">
+          자매 채널 「초저녁야담」에서는 조선 시대의 야담·민담·설화를 오늘의 이야기로 다시 써서
+          가장 차분한 목소리로 들려드립니다. 잠이 오지 않는 밤, 조용한 밤길에 틀어 두세요.
+        </p>
+        <p class="slot">매주 수·토 밤 9시 업로드</p>
+        <div class="actions">
+          <a href="https://www.youtube.com/channel/UCoEeRkwnzuHWwGnOQz1RUFg" target="_blank" rel="noopener" class="btn btn-on-dark">
+            <span class="icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" focusable="false">
+                <path d="M20.25 14.5A8.25 8.25 0 0 1 9.5 3.75a8.25 8.25 0 1 0 10.75 10.75z"/>
+              </svg>
+            </span>
+            초저녁야담 구독하기
+          </a>
+        </div>
+      </div>
+      <div class="fragment">
+        <div class="frag-head">최근 에피소드</div>
+        <!-- AUTO:yadam-videos -->
+      <div class="feed-row">
+        <a class="feed-link" href="https://www.youtube.com/watch?v=SlPejYRJU68" target="_blank" rel="noopener">곳간 열쇠를 3년 동안 감춘 시어머니, 마을 사람들이 모두 말을 잃고 만 충격적인 실체</a>
+        <span class="date">09.22</span>
+      </div>
+        <!-- /AUTO:yadam-videos -->
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- ═══ Band 6.5 · 최신 업로드 (자동 갱신 구역) ═══ -->
 <section id="latest" class="band shell">
   <div class="eyebrow reveal">Latest</div>
@@ -1000,12 +1045,12 @@
         <span class="date">09.23</span>
       </div>
       <div class="feed-row">
-        <a class="feed-link" href="https://www.youtube.com/watch?v=kXUAMBGOHWU" target="_blank" rel="noopener">전 세계 자산 시장을 뒤흔드는 엔화의 비밀 #주식 #환율 #엔캐리트레이드</a>
-        <span class="date">09.19</span>
-      </div>
-      <div class="feed-row">
         <a class="feed-link" href="https://www.youtube.com/watch?v=DOuH0cpN_YM" target="_blank" rel="noopener">미·일 금리 전쟁, 한국 경제에 어떤 영향을 미칠까?</a>
         <span class="date">09.18</span>
+      </div>
+      <div class="feed-row">
+        <a class="feed-link" href="https://www.youtube.com/watch?v=Qf-WE4qnLmg" target="_blank" rel="noopener">4.2광년 밖의 외계행성, 프록시마 b는 제2의 지구가 될 수 있을까?</a>
+        <span class="date">09.13</span>
       </div>
       <!-- /AUTO:latest-videos -->
     </div>
@@ -1028,7 +1073,7 @@
     </div>
   </div>
 
-  <p class="feed-note reveal">마지막 갱신 · <!-- AUTO:updated -->2026-09-24 09:57<!-- /AUTO:updated --></p>
+  <p class="feed-note reveal">마지막 갱신 · <!-- AUTO:updated -->2026-09-24 06:52<!-- /AUTO:updated --></p>
 </section>
 
 <!-- ═══ Band 7 · hero-card-dark (contact) ═══ -->
@@ -1112,6 +1157,7 @@
           <li><a href="#about">소개</a></li>
           <li><a href="#topics">주제</a></li>
           <li><a href="#contents">콘텐츠</a></li>
+          <li><a href="#yadam">초저녁야담</a></li>
           <li><a href="#latest">최신</a></li>
           <li><a href="#contact">연락처</a></li>
         </ul>
@@ -1120,6 +1166,7 @@
         <h4>채널</h4>
         <ul>
           <li><a href="https://www.youtube.com/@ChronosArche_ruvinpapa" target="_blank" rel="noopener">유튜브</a></li>
+          <li><a href="https://www.youtube.com/channel/UCoEeRkwnzuHWwGnOQz1RUFg" target="_blank" rel="noopener">초저녁야담</a></li>
           <li><a href="https://ruvinfather.com" target="_blank" rel="noopener">경제 블로그</a></li>
           <li><a href="https://www.instagram.com/91.41/" target="_blank" rel="noopener">인스타그램</a></li>
         </ul>

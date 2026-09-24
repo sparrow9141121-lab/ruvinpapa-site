@@ -7,6 +7,7 @@ index.html 의 <!-- AUTO:... --> 구역을 유튜브 채널 / 티스토리 블�
   · 대표 영상  = 채널 '인기순' 1위 영상을 주제(역사/과학/경제)별로 선정
   · 대표 글    = 블로그 최신 글
   · 최신 목록  = 유튜브 최신 영상 3개 + 블로그 최신 글 3개
+  · 초저녁야담 = 자매 채널 최신 에피소드 3개 (쇼츠 제외)
 
 실행:  python update-content.py       (또는 update-content.bat 더블클릭)
 의존성 없음 — 파이썬 표준 라이브러리만 사용합니다.
@@ -29,6 +30,10 @@ from email.utils import parsedate_to_datetime
 HANDLE     = "@ChronosArche_ruvinpapa"
 CHANNEL_ID = "UCBeVZJex5unVywCxnDEYwrQ"
 BLOG       = "https://ruvinfather.com"
+
+# 자매 채널 '초저녁야담' — 조선 야담 수면 오디오북 (섹션 #yadam)
+YADAM_CHANNEL_ID = "UCoEeRkwnzuHWwGnOQz1RUFg"
+LATEST_YADAM     = 3       # 야담 섹션에 보여줄 최신 에피소드 수 (쇼츠 제외)
 
 LATEST_VIDEOS = 3          # '최신 영상' 에 몇 개까지 보여줄지
 LATEST_POSTS  = 3          # '블로그 최신 글' 에 몇 개까지 보여줄지
@@ -204,9 +209,9 @@ def collect_videos():
     return with_view_counts(videos)
 
 
-def feed_videos():
+def feed_videos(channel_id=CHANNEL_ID):
     """채널 RSS — 업로드 최신순 (쇼츠 포함)."""
-    xml = get("https://www.youtube.com/feeds/videos.xml?channel_id=%s" % CHANNEL_ID)
+    xml = get("https://www.youtube.com/feeds/videos.xml?channel_id=%s" % channel_id)
     ns = {"a": "http://www.w3.org/2005/Atom", "yt": "http://www.youtube.com/xml/schemas/2015"}
     out = []
     for e in ET.fromstring(xml).findall("a:entry", ns):
@@ -216,6 +221,31 @@ def feed_videos():
         when = datetime.fromisoformat(pub).astimezone(KST) if pub else None
         out.append({"id": vid, "title": title, "when": when,
                     "url": "https://www.youtube.com/watch?v=%s" % vid})
+    return out
+
+
+def is_short(vid):
+    """/shorts/ 주소가 /watch 로 넘어가지 않고 그대로 열리면 쇼츠다.
+    확인에 실패하면 일반 영상으로 본다 (목록에서 빠지는 것보다 낫다)."""
+    try:
+        req = urllib.request.Request("https://www.youtube.com/shorts/%s" % vid,
+                                     headers={"User-Agent": UA})
+        with urllib.request.urlopen(req, timeout=30) as r:
+            return "/shorts/" in r.geturl()
+    except Exception:
+        return False
+
+
+def yadam_episodes():
+    """초저녁야담 최신 에피소드 (쇼츠 제외)."""
+    out = []
+    for v in feed_videos(YADAM_CHANNEL_ID):
+        if len(out) >= LATEST_YADAM:
+            break
+        if not is_short(v["id"]):
+            # '… / 야담 옛날이야기 민담 수면동화' 같은 검색용 꼬리는 떼어 낸다
+            v["title"] = re.split(r"\s+/\s+|\s*\|\s*", v["title"])[0].strip()
+            out.append(v)
     return out
 
 
@@ -348,6 +378,12 @@ def main():
     feed = feed_videos()
     print("· 블로그 최신 글 읽는 중...")
     posts = blog_posts()
+    print("· 초저녁야담 최신 에피소드 읽는 중...")
+    try:
+        yadam = yadam_episodes()
+    except Exception as e:                    # 야담 쪽이 실패해도 본 채널 갱신은 계속
+        print("  (초저녁야담 읽기 실패: %s — 기존 목록 유지)" % e)
+        yadam = None
 
     if not popular and not feed:
         raise RuntimeError("영상 정보를 하나도 가져오지 못했습니다.")
@@ -390,6 +426,8 @@ def main():
     # 2) 최신 목록
     doc = replace_block(doc, "latest-videos", render_rows(latest_videos))
     doc = replace_block(doc, "latest-posts", render_rows(latest_posts))
+    if yadam is not None:
+        doc = replace_block(doc, "yadam-videos", render_rows(yadam))
 
     # 3) 히어로 카드의 세 줄 요약 (대표 영상을 건드리지 않는 날은 그대로 둔다)
     if have_views:
@@ -424,6 +462,7 @@ def main():
         print("  대표 영상 : 조회수를 읽지 못해 기존 선정을 그대로 두었습니다.")
     print("  대표 글  : %s" % top_post["title"])
     print("  최신 영상 %d개 / 최신 글 %d개" % (len(latest_videos), len(latest_posts)))
+    print("  초저녁야담 %s" % ("%d편" % len(yadam) if yadam is not None else "기존 유지"))
     print("")
     print("완료 — index.html 갱신 (%s), 직전 파일은 index.bak.html 로 보관" % stamp)
 
