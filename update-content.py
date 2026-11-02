@@ -181,7 +181,7 @@ def api_videos():
         data = api_get("videos", part="snippet,statistics,contentDetails",
                        id=",".join(ids[i:i + 50]), maxResults=50)
         for it in data.get("items", []):
-            if iso_seconds(it.get("contentDetails", {}).get("duration")) <= 60:
+            if iso_seconds(it.get("contentDetails", {}).get("duration")) <= SHORT_MAX_SECONDS:
                 continue                      # 쇼츠는 대표 후보에서 제외
             views = int(it.get("statistics", {}).get("viewCount", 0))
             out.append({"id": it["id"],
@@ -209,7 +209,41 @@ def collect_videos():
     return with_view_counts(videos)
 
 
+SHORT_MAX_SECONDS = 180    # 이 길이 이하면 쇼츠로 본다 (유튜브 쇼츠 상한 3분)
+
+
+def api_feed(channel_id, count=15):
+    """공식 API 로 업로드 최신순 목록 (쇼츠 여부 표시 포함)."""
+    data = api_get("playlistItems", part="contentDetails",
+                   playlistId="UU" + channel_id[2:], maxResults=count)
+    ids = [i["contentDetails"]["videoId"] for i in data.get("items", [])]
+    if not ids:
+        raise RuntimeError("API 응답에 업로드가 없습니다.")
+    data = api_get("videos", part="snippet,contentDetails", id=",".join(ids))
+    out = []
+    for it in data.get("items", []):
+        pub = it["snippet"].get("publishedAt", "").replace("Z", "+00:00")
+        secs = iso_seconds(it.get("contentDetails", {}).get("duration"))
+        out.append({"id": it["id"], "title": it["snippet"]["title"],
+                    "when": datetime.fromisoformat(pub).astimezone(KST) if pub else None,
+                    "short": secs <= SHORT_MAX_SECONDS,
+                    "url": "https://www.youtube.com/watch?v=%s" % it["id"]})
+    out.sort(key=lambda v: v["when"] or datetime.min.replace(tzinfo=KST), reverse=True)
+    return out
+
+
 def feed_videos(channel_id=CHANNEL_ID):
+    """업로드 최신순 (쇼츠 포함). 키가 있으면 공식 API, 없거나 실패하면 RSS.
+    깃허브 서버에서는 유튜브 RSS 가 404 로 막히는 일이 있어 API 를 먼저 쓴다 (2026-11)."""
+    if API_KEY:
+        try:
+            return api_feed(channel_id)
+        except Exception as e:
+            print("  (공식 API 로 최신 목록 읽기 실패: %s — RSS 로 대신 시도)" % e)
+    return rss_feed(channel_id)
+
+
+def rss_feed(channel_id=CHANNEL_ID):
     """채널 RSS — 업로드 최신순 (쇼츠 포함)."""
     xml = get("https://www.youtube.com/feeds/videos.xml?channel_id=%s" % channel_id)
     ns = {"a": "http://www.w3.org/2005/Atom", "yt": "http://www.youtube.com/xml/schemas/2015"}
@@ -242,7 +276,8 @@ def yadam_episodes():
     for v in feed_videos(YADAM_CHANNEL_ID):
         if len(out) >= LATEST_YADAM:
             break
-        if not is_short(v["id"]):
+        short = v["short"] if "short" in v else is_short(v["id"])
+        if not short:
             # '… / 야담 옛날이야기 민담 수면동화' 같은 검색용 꼬리는 떼어 낸다
             v["title"] = re.split(r"\s+/\s+|\s*\|\s*", v["title"])[0].strip()
             out.append(v)
