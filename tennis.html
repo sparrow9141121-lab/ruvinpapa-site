@@ -3,7 +3,13 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>UTC 테니스 10인 대진표 (회장배 월례대회)</title>
+<title>UTC 테니스 11월 회장배 월례대회 대진표</title>
+<meta name="description" content="UTC 테니스 2026년 11월 회장배 월례대회 - 10인 대진표 · 실시간 스코어 · 순위">
+<meta property="og:type" content="website">
+<meta property="og:title" content="🎾 UTC 테니스 11월 회장배 월례대회">
+<meta property="og:description" content="A·B그룹 10인 대진표 · 실시간 스코어 입력 · 순위표">
+<meta name="theme-color" content="#14532d">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22%3E%3Ctext y=%22.9em%22 font-size=%2290%22%3E🎾%3C/text%3E%3C/svg%3E">
 <style>
   :root {
     --primary: #15803d;
@@ -311,7 +317,7 @@
 <body>
 
 <header>
-  <h1>🎾 UTC 테니스 회장배 월례대회</h1>
+  <h1>🎾 UTC 테니스 11월 회장배 월례대회</h1>
   <div class="sub-title">A그룹 5명(1코트) · B그룹 5명(2코트) 동시 진행 (인당 4게임 / 총 5R)</div>
 </header>
 
@@ -509,9 +515,10 @@ const DEFAULT_NAMES = [
   "이승환", "이윤희", "정용환", "윤은보", "하태정"
 ];
 
-// 대진 구성이 바뀌어 저장 키를 v3로 올림 (이전 v2 점수와 섞이지 않도록)
-const KEY_NAMES = "utc_10p_names_v3";
-const KEY_SCORES = "utc_10m_scores_v3";
+// 대회(월)별로 저장 칸을 분리 - 다음 달 대회 때 이 값만 바꾸면 점수가 섞이지 않음
+const EVENT_ID = "2026_11";
+const KEY_NAMES = "utc_" + EVENT_ID + "_names";
+const KEY_SCORES = "utc_" + EVENT_ID + "_scores";
 
 let playerNames = [...DEFAULT_NAMES];
 let matchScores = emptyScores();
@@ -615,7 +622,7 @@ function downloadHtmlWithNames() {
   const blob = new Blob([docHtml], { type: "text/html;charset=utf-8" });
   const a = document.createElement("a");
   a.href = URL.createObjectURL(blob);
-  a.download = "utc_tennis_10p.html";
+  a.download = "utc_tennis_" + EVENT_ID + ".html";
   document.body.appendChild(a);
   a.click();
   document.body.removeChild(a);
@@ -965,7 +972,7 @@ function buildKakaoText() {
   const dateStr = today.getFullYear() + "." + (today.getMonth() + 1) + "." + today.getDate();
   const lines = [];
 
-  lines.push("🎾 UTC 테니스 회장배 월례대회");
+  lines.push("🎾 UTC 테니스 11월 회장배 월례대회");
   lines.push("📅 " + dateStr);
   lines.push("");
 
