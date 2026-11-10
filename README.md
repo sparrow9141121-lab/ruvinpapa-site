@@ -78,3 +78,49 @@ python update-content.py
 이후에는 매일 아침 8시에 워크플로가 돌면서 새 영상·새 글을 반영하고,
 바뀐 내용이 있을 때만 커밋합니다. **Actions** 탭의 *콘텐츠 자동 갱신* 에서
 `Run workflow` 를 눌러 즉시 돌려볼 수도 있습니다.
+
+## UTC 테니스 대진표 (`tennis.html`)
+
+월례대회 10인 대진표 · 스코어 · 순위 페이지입니다.
+주소: `https://sparrow9141121-lab.github.io/ruvinpapa-site/tennis.html`
+
+### 여러 명이 함께 점수 입력하기 (Firebase 실시간 공유)
+
+`tennis.html` 안의 `FIREBASE_CONFIG` 가 비어 있으면 점수는 **입력한 기기에만** 저장됩니다.
+아래처럼 무료 Firebase 를 연결하면 링크를 연 모든 사람이 같은 점수판을 보고 함께 입력합니다.
+
+1. https://console.firebase.google.com → **프로젝트 추가** (Google 애널리틱스는 꺼도 됨)
+2. 왼쪽 **빌드 → Realtime Database → 데이터베이스 만들기**
+   위치는 `asia-southeast1 (싱가포르)`, 보안 규칙은 **잠금 모드**로 시작
+3. **규칙** 탭에 아래 내용을 붙여 넣고 **게시**
+
+```json
+{
+  "rules": {
+    "utc": {
+      "$event": {
+        ".read": true,
+        ".write": true,
+        "names": {
+          "$i": { ".validate": "newData.isString() && newData.val().length <= 20" }
+        },
+        "scores": {
+          "$m": {
+            ".validate": "newData.child('s1').isNumber() && newData.child('s1').val() >= 0 && newData.child('s1').val() <= 10 && newData.child('s2').isNumber() && newData.child('s2').val() >= 0 && newData.child('s2').val() <= 10"
+          }
+        },
+        "$other": { ".validate": false }
+      }
+    }
+  }
+}
+```
+
+4. **프로젝트 설정(톱니바퀴) → 일반 → 내 앱 → 웹(`</>`)** 으로 앱 등록 후 나오는
+   `firebaseConfig` 값(apiKey, authDomain, databaseURL, projectId, appId)을
+   `tennis.html` 의 `FIREBASE_CONFIG` 에 붙여 넣고 커밋하면 끝.
+   화면 상단 배지가 `🟢 실시간 공유 중` 으로 바뀌면 연결된 것입니다.
+
+- 웹용 `apiKey` 는 원래 공개되는 값이라 코드에 넣어도 됩니다. 보호는 위 규칙이 담당합니다.
+- 링크를 아는 사람은 누구나 점수를 고칠 수 있습니다(동호회 운영용 설정).
+- 다음 달 대회는 `EVENT_ID` 값(예: `"2026_12"`)만 바꾸면 새 점수판이 됩니다.
